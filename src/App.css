@@ -1,38 +1,108 @@
-.App {
+/* 
+Colors:
+Gray 1: #2b3743
+Gray 2: #3f5064
+Green 1: #27d684
+Green 2: #26d580
+White: #fff
+*/
+section {
+  min-height: 81vh;
+  box-sizing: border-box;
+}
+
+/* Header Styles */
+.header-logo {
+  width: 100px;
+}
+
+.nav-link{
+    margin: 0 10px;
+    font-weight: 500 !important;
+}
+
+.login-icon{
+  margin: 0 10px;
+  color: #ffffff;
+  border-radius: 12px;
+  padding: 5px;
+}
+
+/* Banner Styles */
+.banner {
+  position: relative;
+  background-image: url("./assets/img/banner.png");
+  background-size: cover;
+  background-position: top;
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+
+.banner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: -1;
+}
+
+.slogan{
+  font-weight: 900;
+  color: rgb(255, 255, 255);
+  margin-top: 250px;
+}
+
+.search-form{
+  height:50px;
+}
+
+/* Stores Styles */
+.table-rounded {
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+/* Footer Styles */
+.footer {
+  padding: 15px 0;
+  margin-top: auto;
+  background-color: black;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.footer p {
+  font-weight: 400;
+  font-size: 15px;
+  color: #b8b8b8;
+  letter-spacing: 0.5px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* NotFound Styles */
+.page-not-found h1{
+  color: #f0f0f0;
+  font-size: 300px;
+  padding: 30px 0;
+  display: block;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.page-not-found h2{
+  color:#198754;
+  font-size: 60px;
+  padding-bottom: 10px;
 }
 
-.App-link {
-  color: #61dafb;
+.page-not-found h3{
+  color:#2c2c2c;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.page-not-found .error-link{
+  text-decoration: none;
+  color:#198754;
+}
+
+.page-not-found .error-link:hover{
+  opacity: .8;
 }
