@@ -22,7 +22,6 @@ class StoreService{
     }
 
     searchStore(keyword){
-        console.log("search: "+ keyword);
         return axios.get(STORE_API_URL + "stores/"+ keyword);
     }
 }

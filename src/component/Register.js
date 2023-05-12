@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Container, Form, Row, Col, Button, Card } from "react-bootstrap";
-import { FaFacebook, FaGoogle } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { FaGoogle, FaFacebook } from "react-icons/fa";
+import { register } from "../service/OnlineService";
+import { useNavigate as navigate, Link} from "react-router-dom";
 import { toast } from "react-toastify";
-import { login } from "../service/OnlineService";
 
 export const API_BASE_URL = "http://localhost:8080";
 export const OAUTH2_REDIRECT_URI = "http://localhost:3000/oauth2/redirect";
@@ -13,13 +14,17 @@ export const FACEBOOK_AUTH_URL =
   API_BASE_URL +
   "/oauth2/authorize/facebook?redirect_uri=" +
   OAUTH2_REDIRECT_URI;
-export const ACCESS_TOKEN = "accessToken";
 
-const Login = (props) => {
-  const [authenticated, setAuthenticated] = useState();
-  const [loginData, setLoginData] = useState({ email: "", password: "" });
+const Register = (props) => {
   const navigate = useNavigate();
+  const [registrationData, setRegistrationData] = useState({
+    userName: "",
+    email: "",
+    password: "",
+    passwordConfirmation: "",
+  });
   const [errors, setErrors] = useState({});
+  const [passwordsMatch, setPasswordsMatch] = useState(false);
 
   useEffect(() => {
     if (props.authenticated) {
@@ -29,47 +34,58 @@ const Login = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const validationErrors = validateForm();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-    const loginRequest = Object.assign({}, loginData);
-    login(loginRequest)
-      .then((response) => {
-        const id = toast.loading("Logging in please wait...");
-        setTimeout(() => {
-        localStorage.setItem(ACCESS_TOKEN, response.accessToken);
-        setAuthenticated(true);
-        toast.update(id, { render: "Logged in successfully!", type: "success", isLoading: false });
-        }, 1000);
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
-      })
-      .catch((error) => {
-        let errors = {};
-        errors.email = true;
-        errors.password = true;
-        setErrors(errors);
-        toast.error("Incorrect username or Password")
-      });
-  };
 
-  const validateForm = () => {
-    let errors = {};
-
-    if (!loginData.email) {
-      errors.email = "Please enter email.";
-    }
-    if (!loginData.password) {
-      errors.password = "Please enter password.";
-    }
-    return errors;
+    const { confirmpassword, ...requestWithoutConfirmPassword } = registrationData;
+    const registrationRequest = Object.assign({}, registrationData);
+    register(registrationData)
+    .then(response => {
+      toast.success("You're successfully registered. Please login to continue!");
+      navigate("/login");
+  }).catch(error => {
+      toast.error((error && error.message) || 'Oops! Something went wrong. Please try again!');            
+  });
   };
 
   const handleChange = (event) => {
-    setLoginData({ ...loginData, [event.target.name]: event.target.value });
+
+    const { name, value } = event.target;
+    const error = validateForm(name, value);
+    setRegistrationData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+    setErrors((prevState) => ({
+      ...prevState,
+      [name]: error,
+    }));
+  };
+
+  const validateForm = (fieldName, value) => {
+    let error = "";
+    if (fieldName === "email") {
+      if (!value) {
+        error = "Email is required";
+      } else if (!/\S+@\S+\.\S+/.test(value)) {
+        error = "Invalid email address";
+      }
+    } else if (fieldName === "password") {
+      if (!value) {
+        error = "Password is required";
+      } else if (value.length < 6) {
+        error = "Password must be at least 6 characters long";
+      }
+    } else if (fieldName === "passwordConfirmation") {
+      if (!value) {
+        error = "Confirm password is required";
+      } else if (value !== registrationData.password) {
+        error = "Passwords do not match";
+      }
+    } else if (fieldName === "userName") {
+      if (!value) {
+        error = "Full Name is required!";
+      }
+    }
+    return error;
   };
 
   return (
@@ -79,18 +95,30 @@ const Login = (props) => {
           <Col xs={12} md={6} lg={4}>
             <Card className="shadow login-card">
               <Card.Body>
-                <h3 className="fw-bold text-secondary my-1">Welcome!</h3>
-                <h6 className="text-secondary mb-4">
-                  Log in or register to continue
-                </h6>
-                <Form onSubmit={handleSubmit} noValidate>
+                <h4 className="fw-bold text-secondary my-1">
+                  Register with <br/>Know-Your-Neighborhood
+                </h4>
+                <Form onSubmit={handleSubmit}>
+                <Form.Group>
+                    <Form.Control
+                      type="text"
+                      placeholder="Full Name"
+                      className="my-3 py-2"
+                      name="userName"
+                      onChange={handleChange}
+                      isInvalid={errors.userName}
+                      required
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.userName}
+                    </Form.Control.Feedback>
+                  </Form.Group>
                   <Form.Group>
                     <Form.Control
                       type="email"
                       placeholder="Email"
                       className="my-3 py-2"
                       name="email"
-                      value={loginData.email}
                       onChange={handleChange}
                       isInvalid={errors.email}
                       required
@@ -105,7 +133,6 @@ const Login = (props) => {
                       placeholder="Password"
                       className="my-3 py-2"
                       name="password"
-                      value={loginData.password}
                       onChange={handleChange}
                       isInvalid={errors.password}
                       required
@@ -114,26 +141,33 @@ const Login = (props) => {
                       {errors.password}
                     </Form.Control.Feedback>
                   </Form.Group>
+                  <Form.Group>
+                    <Form.Control
+                      type="password"
+                      placeholder="Confirm Password"
+                      className="my-3 py-2"
+                      name="passwordConfirmation"
+                      onChange={handleChange}
+                      isInvalid={errors.passwordConfirmation}
+                      required
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.passwordConfirmation}
+                    </Form.Control.Feedback>
+                  </Form.Group>
                   <div className="text-center mt-3">
                     <Button
                       variant="success"
                       type="submit"
                       className="w-100 rounded-pill my-2 py-2 fw-semibold"
                     >
-                      LOGIN
+                      Register
                     </Button>
-                    <Link to={"/register"}>
-                      <Button
-                        variant="outline-success"
-                        className="w-100 rounded-pill my-2 py-2 fw-semibold"
-                      >
-                        REGISTER
-                      </Button>
-                    </Link>
+                    <span>Already have an account? <Link to="/login"  className="login-link">Login!</Link></span>
                   </div>
                 </Form>
                 <span className="d-flex justify-content-center my-2 text-secondary">
-                  or continue with
+                  or register with
                 </span>
                 <Row className="my-3">
                   <Col sm={6}>
@@ -183,4 +217,4 @@ const Login = (props) => {
   );
 };
 
-export default Login;
+export default Register;

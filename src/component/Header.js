@@ -1,16 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Navbar, Nav, Container } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Logo from "../assets/img/Logo.png";
 import { NavLink } from "react-router-dom";
-import {FaUserAlt} from "react-icons/fa";
 
-const Header = () => {
+const Header = (props) => {
   const [activeLink, setActiveLink] = useState("home");
+
+  const handleLogout = () =>{
+    props.onLogout()
+  }
 
   const updateActiveLink = (link) => {
     setActiveLink(link);
+    
   };
+  
   return (
     <Navbar bg="dark" variant="dark" expand="lg" className="header">
       <Container>
@@ -34,8 +39,9 @@ const Header = () => {
               onClick={() => updateActiveLink("stores")}
               className={activeLink === "stores" ? "active" : ""}
             >
-              Store
+              Stores
             </Nav.Link>
+            {props.authenticated && (
             <Nav.Link
               as={NavLink}
               to="/profile"
@@ -44,16 +50,25 @@ const Header = () => {
             >
               Profile
             </Nav.Link>
+            )}
+            { !props.authenticated && (
             <Nav.Link
               as={NavLink}
               to="/login"
               onClick={()=> updateActiveLink("login")}
               className={activeLink === "login" ? "active": ""}
-              
             >
-              <FaUserAlt size={30} className="login-icon bg-success"/>
-              Login
+              Login/Register
             </Nav.Link>
+            )}
+            {props.authenticated && (
+              <Nav.Link
+                onClick={() => handleLogout()}
+                className="nav-link logout-link"
+              >
+                Logout
+              </Nav.Link>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>

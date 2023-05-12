@@ -106,3 +106,37 @@ section {
 .page-not-found .error-link:hover{
   opacity: .8;
 }
+
+/* Login Styles */
+.login-form{
+  padding-top: 100px;
+}
+
+.login-card{
+  border-radius: 0 !important;
+  overflow: hidden;
+}
+
+.form-divider{
+  text-align: center;
+}
+
+/* toast style */
+.toast-position {
+  top: 8rem !important;
+}
+
+/* profile style */
+.profile-image{
+  width: 150px;
+}
+
+.login-link{
+  text-decoration: none;
+  color: #198754;
+}
+
+.login-link:hover{
+  color: #198754;
+  opacity: .75;
+}

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Modal, Container, Form, Button, Row, Col } from "react-bootstrap";
 
+
 const StoreForm = (props) => {
   const [storeData, setStoreData] = useState({
     storeId: props.storeData ? props.storeData.storeId : null,
@@ -108,8 +109,8 @@ const StoreForm = (props) => {
                 <Col className="mt-3">
                   <Button
                     type="submit"
-                    className={`btn mx-2 ${
-                      storeData.storeId ? "btn-warning" : "btn-success"
+                    className={`mx-2 btn ${
+                      storeData.storeId ? "btn-primary" : "btn-success"
                     }`}
                   >
                     {storeData.storeId ? "Update" : "Submit"}

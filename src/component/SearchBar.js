@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, InputGroup, FormControl, Button } from "react-bootstrap";
-import  {useNavigate}  from "react-router-dom";
+import  {useNavigate, useParams}  from "react-router-dom";
 
 const SearchBar = () => {
-  const [keyword, setKeyword] = useState(null);
+  const searchedKey = useParams();
+  const [keyword, setKeyword] = useState('');
   const navigate = useNavigate();
 
   const searchStore = (event) => {
     event.preventDefault();
-    if(keyword == null){
+    if(keyword === ""){
       navigate("/stores");
     }else{
       navigate(`/stores/${keyword}`);
@@ -18,6 +19,13 @@ const SearchBar = () => {
   const handleKeywordChange = (event) => {
     setKeyword(event.target.value);
   };
+
+  useEffect(() => {
+    if(!searchedKey){
+      setKeyword(searchedKey);
+    }
+  }, [searchedKey]);
+
   return (
     <Form className="search" noValidate onSubmit={searchStore}>
       <InputGroup className="search-form">
