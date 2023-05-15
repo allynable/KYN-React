@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Navbar, Nav, Container } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Logo from "../assets/img/Logo.png";
+import Logo from "../assets/img/header-logo.svg";
 import { NavLink } from "react-router-dom";
 
 const Header = (props) => {

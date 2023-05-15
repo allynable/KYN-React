@@ -56,7 +56,7 @@ const StoreForm = (props) => {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Add New Store
+          {storeData.storeId ? ("Update Store") : ("Add New Store")}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>

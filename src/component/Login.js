@@ -39,9 +39,9 @@ const Login = (props) => {
       .then((response) => {
         const id = toast.loading("Logging in please wait...");
         setTimeout(() => {
-        localStorage.setItem(ACCESS_TOKEN, response.accessToken);
-        setAuthenticated(true);
-        toast.update(id, { render: "Logged in successfully!", type: "success", isLoading: false });
+          localStorage.setItem(ACCESS_TOKEN, response.accessToken);
+          setAuthenticated(true);
+          toast.update(id, { render: "Logged in successfully!", type: "success", isLoading: false });
         }, 1000);
         setTimeout(() => {
           window.location.reload();

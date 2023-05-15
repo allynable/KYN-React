@@ -84,7 +84,7 @@ const StoreTable = (props) => {
   return (
     <section>
       <Container>
-        <Row className="my-3 align-items-center">
+        <Row className="py-5 align-items-center">
           <Col xs={12} md={4} lg={3}>
             <h1>Stores</h1>
           </Col>
@@ -93,11 +93,13 @@ const StoreTable = (props) => {
               <SearchBar />
             </div>
           </Col>
-          <Col xs={4} md={3} lg={2}>
-            <button className="btn btn-primary" onClick={() => showStore()}>
-              Add New Store
-            </button>
-          </Col>
+          {props.authenticated && (
+            <Col xs={4} md={3} lg={2}>
+              <button className="btn btn-primary" onClick={() => showStore()}>
+                Add New Store
+              </button>
+            </Col>
+          )}
         </Row>
 
         <Table bordered striped className="table table-rounded">

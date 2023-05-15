@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { Form, InputGroup, FormControl, Button } from "react-bootstrap";
-import  {useNavigate, useParams}  from "react-router-dom";
+import  {useNavigate}  from "react-router-dom";
 
 const SearchBar = () => {
-  const searchedKey = useParams();
   const [keyword, setKeyword] = useState('');
   const navigate = useNavigate();
 
@@ -19,12 +18,6 @@ const SearchBar = () => {
   const handleKeywordChange = (event) => {
     setKeyword(event.target.value);
   };
-
-  useEffect(() => {
-    if(!searchedKey){
-      setKeyword(searchedKey);
-    }
-  }, [searchedKey]);
 
   return (
     <Form className="search" noValidate onSubmit={searchStore}>

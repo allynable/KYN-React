@@ -163,7 +163,7 @@ const Register = (props) => {
                     >
                       Register
                     </Button>
-                    <span>Already have an account? <Link to="/login"  className="login-link">Login!</Link></span>
+                    <span>Already have an account? <Link to="/login"  className="login-link">Login here</Link>.</span>
                   </div>
                 </Form>
                 <span className="d-flex justify-content-center my-2 text-secondary">
